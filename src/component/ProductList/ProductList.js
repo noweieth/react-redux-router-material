@@ -1,7 +1,6 @@
 import React from 'react';
 
 const ProductList = (props) => {
-    console.log(props);
     return (
         <div className="card">
             <div className="card-header bg-light">
