@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom';
+import * as constAPI from '../../contants/CONST_API'
+import * as callAPI from '../../utils/mockAPI'
 import ProductList from '../../component/ProductList/ProductList'
 import ProductItem from '../../component/ProductItem/ProductItem'
 
-const ProductListPage = () => {
+const ProductListPage = (props) => {
+    const [product, setproduct] = useState(props.products)
     const showProduct = (products) => {
         var result = null
         if (products.length > 0) {
@@ -19,24 +24,17 @@ const ProductListPage = () => {
 
         return result
     }
-    var product = [
-        {
-            id: '123',
-            name: 'SamSung',
-            price: 10000,
-            status: false
-        },
-        {
-            id: '123',
-            name: 'Apple',
-            price: 10000,
-            status: true
-        }
-    ]
+    useEffect(() => {
+        callAPI.mockAPI(constAPI.PRODUCT_LIST, 'GET', null).then(res => {
+            setproduct(res.data)
+        })
+    }, [])
+
+
     return (
         <div className="row mt-5">
             <div className="col-12 mb-3">
-                <a name="" id="" className="btn btn-primary float-left" href="#1" role="button">Thêm sản phẩm</a>
+                <NavLink to='product/add' activeClassName='active' className="btn btn-primary float-left">Thêm sản phẩm</NavLink>
             </div>
             <div className="col-lg-12">
                 <ProductList>
@@ -47,4 +45,16 @@ const ProductListPage = () => {
     );
 }
 
-export default ProductListPage;
+
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        products: state.productReducer
+    }
+}
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage)
