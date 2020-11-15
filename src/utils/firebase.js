@@ -3,6 +3,7 @@ import 'firebase/database';
 import 'firebase/storage';
 import * as helper from '../helpers/handleObject'
 
+
 var firebaseConfig = {
     apiKey: "AIzaSyAw9pehE5_uU3yexHR6fMSHqfKjkwCrT0o",
     authDomain: "react-redux-router-85f3c.firebaseapp.com",
