@@ -57,3 +57,22 @@ export const Add_product = (product) => {
         product
     }
 }
+export const Edit_product_api = (product) => {
+    return (dispatch) => {
+        return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${product.id}`, 'PUT', {
+            name: product.name,
+            price: product.price,
+            status: product.status
+        }).then(res => {
+            dispatch(Edit_product(product))
+        })
+    }
+
+}
+
+export const Edit_product = (product) => {
+    return {
+        type: productActionTypes.UPDATE_PRODUCT,
+        product
+    }
+}

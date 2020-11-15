@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux'
-import * as constAPI from '../../contants/CONST_API'
-import * as callAPI from '../../utils/mockAPI'
 
-import { Add_product_api } from '../../redux/Product/action'
+import { Add_product_api, Edit_product_api } from '../../redux/Product/action'
 
 const ProductActionPage = (props) => {
     const [name, setname] = useState("");
@@ -41,26 +39,27 @@ const ProductActionPage = (props) => {
             })
             history.goBack()
         } else {
-            callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${idProductEdit}`, 'PUT', {
+            props.editProduct({
+                id: idProductEdit,
                 name: name,
                 price: price,
                 status: status
-            }).then(res => {
-                console.log(res);
-                history.goBack()
             })
+            history.goBack()
         }
 
     }
 
     useEffect(() => {
-        var { match } = props
+        var { match, products } = props
         if (match) {
             setidProductEdit(match.params.id)
-            callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${match.params.id}`, 'GET', null).then(res => {
-                setname(res.data.name)
-                setprice(res.data.price)
-                setstatus(res.data.status)
+            products.forEach((product, index) => {
+                if (match.params.id === product.id) {
+                    setname(product.name)
+                    setprice(product.price)
+                    setstatus(product.status)
+                }
             })
         }
         return
@@ -103,6 +102,10 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         addProduct: (product) => {
             dispatch(Add_product_api(product))
+        },
+        editProduct: (product) => {
+            console.log(product);
+            dispatch(Edit_product_api(product))
         }
     }
 }

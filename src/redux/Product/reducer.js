@@ -3,6 +3,22 @@ var initialState = []
 
 const productReucer = (state = initialState, action) => {
     switch (action.type) {
+        case productActionTypes.UPDATE_PRODUCT:
+            var products = [...state];
+            let ind;
+            products.forEach((product, index) => {
+                if (product.id === action.product.id) {
+                    ind = index
+                }
+            })
+            products[ind] = {
+                ...products[ind],
+                name: action.product.name,
+                price: action.product.price,
+                status: action.product.status
+            }
+            state = [...products]
+            return [...state]
         case productActionTypes.ADD_PRODUCT:
             var products = [...state];
             products.push(action.product)
