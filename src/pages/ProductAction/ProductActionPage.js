@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-
+import { connect } from 'react-redux'
 import * as constAPI from '../../contants/CONST_API'
 import * as callAPI from '../../utils/mockAPI'
+
+import { Add_product_api } from '../../redux/Product/action'
 
 const ProductActionPage = (props) => {
     const [name, setname] = useState("");
@@ -32,14 +34,12 @@ const ProductActionPage = (props) => {
     const onSubmit = (e) => {
         e.preventDefault();
         if (idProductEdit === '') {
-            callAPI.mockAPI(constAPI.PRODUCT_LIST, 'POST', {
+            props.addProduct({
                 name: name,
                 price: price,
                 status: status
-            }).then(res => {
-                console.log(res);
-                history.goBack()
             })
+            history.goBack()
         } else {
             callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${idProductEdit}`, 'PUT', {
                 name: name,
@@ -93,5 +93,18 @@ const ProductActionPage = (props) => {
         </div>
     );
 }
+const mapStateToProps = (state) => {
+    return {
+        products: state.productReducer
+    }
+}
 
-export default ProductActionPage;
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        addProduct: (product) => {
+            dispatch(Add_product_api(product))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductActionPage)

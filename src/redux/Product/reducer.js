@@ -4,7 +4,10 @@ var initialState = []
 const productReucer = (state = initialState, action) => {
     switch (action.type) {
         case productActionTypes.ADD_PRODUCT:
-
+            var products = [...state];
+            products.push(action.product)
+            state = [...products]
+            return [...state]
         case productActionTypes.DELETE_PRODUCT:
             var products = [...state];
             products.forEach((prd, index) => {

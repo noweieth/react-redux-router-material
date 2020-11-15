@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom';
-import * as constAPI from '../../contants/CONST_API'
-import * as callAPI from '../../utils/mockAPI'
 import ProductList from '../../component/ProductList/ProductList'
 import ProductItem from '../../component/ProductItem/ProductItem'
 import { Fetch_product_api, Delete_product_api } from '../../redux/Product/action'

@@ -40,8 +40,12 @@ export const Delete_product = (id) => {
 }
 export const Add_product_api = (product) => {
     return (dispatch) => {
-        return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}`, 'DELETE', null).then(res => {
-            dispatch(Delete_product(product))
+        return callAPI.mockAPI(constAPI.PRODUCT_LIST, 'POST', {
+            name: product.name,
+            price: product.price,
+            status: product.status
+        }).then(res => {
+            dispatch(Add_product(res.data))
         })
     }
 
