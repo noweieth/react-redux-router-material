@@ -5,9 +5,26 @@ import * as constAPI from '../../contants/CONST_API'
 import * as callAPI from '../../utils/mockAPI'
 import ProductList from '../../component/ProductList/ProductList'
 import ProductItem from '../../component/ProductItem/ProductItem'
+import { Fetch_product_api, Delete_product_api } from '../../redux/Product/action'
 
 const ProductListPage = (props) => {
-    const [product, setproduct] = useState(props.products)
+    const [product, setproduct] = useState([])
+    useEffect(() => {
+        props.fetchAllProdcuts()
+        setproduct([...props.products])
+    }, []);
+    useEffect(() => {
+        console.log('calll API');
+        const interval = setInterval(() => {
+            props.fetchAllProdcuts()
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const onDelete = (id) => {
+        console.log(id);
+        props.deleteProduct(id)
+    }
     const showProduct = (products) => {
         var result = null
         if (products.length > 0) {
@@ -17,18 +34,13 @@ const ProductListPage = (props) => {
                         key={index}
                         product={product}
                         index={index}
+                        onDelete={onDelete}
                     />
                 )
             })
         }
-
         return result
     }
-    useEffect(() => {
-        callAPI.mockAPI(constAPI.PRODUCT_LIST, 'GET', null).then(res => {
-            setproduct(res.data)
-        })
-    }, [])
 
 
     return (
@@ -38,7 +50,7 @@ const ProductListPage = (props) => {
             </div>
             <div className="col-lg-12">
                 <ProductList>
-                    {showProduct(product)}
+                    {showProduct(props.products)}
                 </ProductList >
             </div>
         </div>
@@ -47,14 +59,20 @@ const ProductListPage = (props) => {
 
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         products: state.productReducer
     }
 }
 
-const mapDispatchToProps = {
-
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchAllProdcuts: () => {
+            dispatch(Fetch_product_api())
+        },
+        deleteProduct: (id) => {
+            dispatch(Delete_product_api(id))
+        }
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage)

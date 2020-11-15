@@ -1,21 +1,20 @@
 import { productActionTypes } from './action'
-var initialState = [{
-    id: '123',
-    name: 'SamSung',
-    price: 10000,
-    status: false
-},
-{
-    id: '123',
-    name: 'Apple',
-    price: 10000,
-    status: true
-}]
+var initialState = []
 
 const productReucer = (state = initialState, action) => {
     switch (action.type) {
-        case productActionTypes.EXPORT:
-            return
+        case productActionTypes.DELETE_PRODUCT:
+            var products = [...state];
+            products.forEach((prd, index) => {
+                if (prd.id === action.id) {
+                    products.splice(index, 1);
+                }
+            })
+            state = [...products]
+            return [...state]
+        case productActionTypes.FETCH_PRODUCT:
+            state = action.products
+            return [...state]
         default:
             return [...state]
     }
