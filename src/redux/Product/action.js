@@ -1,5 +1,7 @@
 import * as constAPI from '../../contants/CONST_API'
 import * as callAPI from '../../utils/mockAPI'
+import { pushData, fetchData, deleteData } from '../../utils/firebase'
+
 
 export const productActionTypes = {
     FETCH_PRODUCT: 'FETCH_PRODUCT',
@@ -9,10 +11,12 @@ export const productActionTypes = {
 };
 
 export const Fetch_product_api = (products) => {
+
     return (dispatch) => {
-        return callAPI.mockAPI(constAPI.PRODUCT_LIST, 'GET', null).then(res => {
-            dispatch(Fetch_product(res.data))
-        })
+        fetchData().then(res => dispatch(Fetch_product(res)))
+        // return callAPI.mockAPI(constAPI.PRODUCT_LIST, 'GET', null).then(res => {
+        //     dispatch(Fetch_product(res.data))
+        // })
     }
 }
 
@@ -25,11 +29,15 @@ export const Fetch_product = (products) => {
 
 export const Delete_product_api = (id) => {
     return (dispatch) => {
-        return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${id}`, 'DELETE', null).then(res => {
-            dispatch(Delete_product(res.data.id))
-        })
+        deleteData(id)
+        dispatch(Delete_product(id))
+        // }
+        // return (dispatch) => {
+        //     return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${id}`, 'DELETE', null).then(res => {
+        //         dispatch(Delete_product(res.data.id))
+        //     })
+        // }
     }
-
 }
 
 export const Delete_product = (id) => {
@@ -40,14 +48,28 @@ export const Delete_product = (id) => {
 }
 export const Add_product_api = (product) => {
     return (dispatch) => {
-        return callAPI.mockAPI(constAPI.PRODUCT_LIST, 'POST', {
+        pushData({//push into firebase
+            id: '',
             name: product.name,
             price: product.price,
             status: product.status
-        }).then(res => {
-            dispatch(Add_product(res.data))
         })
+        dispatch(Add_product({//add vao store redux
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            status: product.status
+        }))
     }
+    // return (dispatch) => {
+    //     return callAPI.mockAPI(constAPI.PRODUCT_LIST, 'POST', {
+    //         name: product.name,
+    //         price: product.price,
+    //         status: product.status
+    //     }).then(res => {
+    //         dispatch(Add_product(res.data))
+    //     })
+    // }
 
 }
 
@@ -59,14 +81,28 @@ export const Add_product = (product) => {
 }
 export const Edit_product_api = (product) => {
     return (dispatch) => {
-        return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${product.id}`, 'PUT', {
+        pushData({//push into firebase
+            id: product.id,
             name: product.name,
             price: product.price,
             status: product.status
-        }).then(res => {
-            dispatch(Edit_product(product))
         })
+        dispatch(Edit_product({//edit store redux
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            status: product.status
+        }))
     }
+    // return (dispatch) => {
+    //     return callAPI.mockAPI(`${constAPI.PRODUCT_LIST}/${product.id}`, 'PUT', {
+    //         name: product.name,
+    //         price: product.price,
+    //         status: product.status
+    //     }).then(res => {
+    //         dispatch(Edit_product(product))
+    //     })
+    // }
 
 }
 

@@ -1,6 +1,5 @@
 import './App.scss';
 import Menu from './component/Menu/Menu';
-import ProductList from './component/ProductList/ProductList';
 import routes from './routes/routes'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 
