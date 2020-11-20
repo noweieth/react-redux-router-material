@@ -44,3 +44,15 @@ export function fetchData() {
 export function deleteData(id) {
     data.child(id).remove();
 }
+
+
+const dataTest = firebase.database()
+export function fetchDatatest() {
+    return data
+        .once('value')
+        .then((snapshot) => {
+            console.log(snapshot.val());
+            return helper.object_to_array(snapshot.val());
+        }).catch((err) => { alert(err) })
+}
+fetchDatatest()
